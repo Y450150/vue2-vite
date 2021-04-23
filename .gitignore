@@ -1,0 +1,10 @@
+package-lock.json
+app/
+dist/
+.vscode/
+logs
+*.log
+node_modules/
+.npm
+.eslintcache
+.env
