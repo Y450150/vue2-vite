@@ -1,13 +1,16 @@
 
 
-
-const express = require('express')
-const { createBundleRenderer } = require('vue-server-renderer')
-const path = require('path')
 const fs = require('fs')
-const resolve = file => path.resolve(__dirname, file)
+const path = require('path')
+const express = require('express')
+const router = require('./node/router')
 const devServer = require('./build/setup-dev-server')
+const { createBundleRenderer } = require('vue-server-renderer')
+
+const resolve = file => path.resolve(__dirname, file)
 const server = express()
+
+
 
 const serve = (path) => express.static(resolve(path), {
     maxAge: 0
@@ -22,7 +25,7 @@ const createRenderer = (bundle, options) => {
 let renderer, readyPromise;
 const template = fs.readFileSync(resolve('./index.template.html'), 'utf-8')
 readyPromise = devServer(server, (bundle, options) => {
-    renderer = createRenderer(bundle, { template, ...options } )
+    renderer = createRenderer(bundle, { template, ...options })
 })
 
 function render(req, res) {
@@ -33,8 +36,10 @@ function render(req, res) {
         res.send(html)
     })
 }
-server.use('/dist', serve('./dist'))
-server.get('*', (req, res) => {
+
+server.use('/dist', serve('./dist')); // 部署dist目录
+server.use('/api', router) // 部署路由
+server.get('/page/index', (req, res) => {
     readyPromise.then(() => render(req, res))
 })
 

@@ -1,60 +1,59 @@
-body, html {
-    font-size: 16px;
-}
-.main-page{
-    width: 100%;
-    height: 100%;
-    min-height: 660px;
-    // padding-top: 200px;
-    position: relative;
-    min-width: 722px;
-    background: linear-gradient( #a6b099, #cea57e);
+.toptips {
+    width: 200px;
+    height: 50px;
+    background: #f6ffed;
+    left: 50%;
+    top: 40px;
+    transform: translate(-50%, 0);
+    position: fixed;
+    transition: opacity .5s linear;
+    border: 1px solid #b7eb8f;
+    text-align: center;
+    border-radius: 5px;
+    line-height: 50px;
+    display: none;
+    /* animation-name: toptips; */
+    /* animation-duration: 4s; */
 }
 
-.content {
+.toptips.active {
+    display: block;
+    z-index: 1001;
+}
+
+@keyframes toptips {
+    from {
+        background: black;
+    }
+
+    to {
+        background: pink;
+    }
+}
+
+.icon-list {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
     display: flex;
-    justify-content: center;
-    .user-container + .user-container {
-        margin-left: 10px;
-    }
-    .user-box {
-        display: inline-block;
-        position: relative;
-    }
-    .user-box-cards {
-        display: flex;
-        position: relative;
-        padding: 20px;
-    }
-    .user-background{
-        position: absolute;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        &::before {
-            content: "";
-            display: block;
-            width: 570px;
-            height: 320px;
-            background-image: url(http://wx.qlogo.cn/mmhead/wzJhLVPsrd0u55Y36miaH3fCnibwkXADQ5S3B6iaLkcTSPOmI9HvyvGFA/0);
-            background-size: cover;
-            background-repeat: no-repeat;
-            filter: blur(3px);
-        }
-    }
-    
-    .user-box-text {
-        height: 170px;
-        text-align: center;
-        background: #fff;
-        p {
-            padding-top: 30px;
-        }
-        a {
-            display: inline-block;
-            margin-top: 60px;
-            font-size: 12px;
-            color: lightblue;
-        }
-    }
+    flex-wrap: wrap;
+    z-index: 1000
+}
+
+.icon-list-cell {
+    display: flex;
+    align-items: center;
+    margin: 0 20px 10px 20px;
+}
+
+.icon-list-cell img {
+    margin-right: 20px;
+}
+
+.icon-list-cell button {
+    background: pink;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 20px;
+    color: #fff;
 }

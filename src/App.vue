@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <h1>hello world</h1>
-    <div>
-      {{ count }}
-    </div>
-    <button @click="count++">点击</button>
     <userLogin></userLogin>
   </div>
 </template>
