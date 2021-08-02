@@ -46,11 +46,27 @@
 <script>
 // import { mapState } from "vuex";
 // import loginApi from "../../api/login.api";
-import userCard from "./components/user-card.vue";
 import Clipboard from "clipboard";
 export default {
-  components: { userCard },
-  mounted() {},
+  mounted() {
+    var ws = new WebSocket("ws://localhost:8888");
+    ws.onopen = function (e) {
+      console.log("连接服务器成功");
+      // 向服务器发送消息
+      ws.send("what`s your name?");
+    };
+    ws.onclose = function (e) {
+      console.log("服务器关闭");
+    };
+    ws.onerror = function () {
+      console.log("连接出错");
+    };
+    // 接收服务器的消息
+    ws.onmessage = function (e) {
+      let message = "message:" + e.data + "";
+      console.log(message);
+    };
+  },
   data() {
     return {
       isDir: true,
@@ -79,10 +95,12 @@ export default {
       }
     },
     checkFileType({ type }) {
-      return type === "image/svg+xml";
+      const rules = ["image/svg+xml", "image/png"];
+      return rules.includes(type);
     },
     handleClear() {
-      this.list=[]
+      this.list = [];
+      this.$message.success("清空成功");
     },
   },
 };

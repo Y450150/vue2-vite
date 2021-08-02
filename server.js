@@ -39,10 +39,23 @@ function render(req, res) {
 
 server.use('/dist', serve('./dist')); // 部署dist目录
 server.use('/api', router) // 部署路由
-server.get('/page/index', (req, res) => {
+server.get('/', (req, res) => {
     readyPromise.then(() => render(req, res))
 })
 
 server.listen(8080, () => {
     console.log('server start')
 })
+
+var ws = require("nodejs-websocket")
+
+ws.createServer(function (conn) {
+    console.log("New connection")
+    conn.on("text", function (str) {
+        console.log("Received " + str)
+        conn.sendText(str.toUpperCase() + "!!!")
+    })
+    conn.on("close", function (code, reason) {
+        console.log("Connection closed")
+    })
+}).listen(8888)
