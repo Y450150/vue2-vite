@@ -1,14 +1,14 @@
 
-import svg from './turn/svg.js'
-
+import svg from './svg.js'
+import chat from './chat.js'
 const RouterView = {
-    name: "test",
+    name: "Router",
     render: h => h('router-view')
 }
 
 export default [{
     path: '/page',
     component: RouterView,
-    children: [...svg]
+    children: [...svg, ...chat]
 }
 ]

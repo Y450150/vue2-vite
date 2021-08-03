@@ -48,12 +48,18 @@ server.listen(8080, () => {
 })
 
 var ws = require("nodejs-websocket")
+const mockPath = path.resolve(__dirname, './node/mock/chat.json')
+const clientList = []
 
 ws.createServer(function (conn) {
     console.log("New connection")
+    clientList.push(conn)
     conn.on("text", function (str) {
-        console.log("Received " + str)
-        conn.sendText(str.toUpperCase() + "!!!")
+        var data = JSON.parse(fs.readFileSync(mockPath, 'utf-8'))
+        data.push(JSON.parse(str))
+        data = JSON.stringify(data)
+        fs.writeFileSync(mockPath, data)
+        clientList.forEach(conn => conn.send(data))
     })
     conn.on("close", function (code, reason) {
         console.log("Connection closed")

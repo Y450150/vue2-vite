@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import turn from './router/turn.js'
+import router from './router/router.js'
 
 Vue.use(Router)
 
 const routes = [
-    ...turn
+    ...router
 ]
 
 export function createRouter() {
