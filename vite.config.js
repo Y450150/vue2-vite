@@ -8,7 +8,7 @@ export default defineConfig(
         plugins: [createVuePlugin()],
         resolve: {
             alias: [
-                { find: '@ant-design/icons-vue', replacement: path.resolve(__dirname, './custom_package/icons-vue/icons.js') }
+                // { find: '@ant-design/icons-vue', replacement: path.resolve(__dirname, './custom_package/icons-vue/icons.js') }
             ],
         },
     }
