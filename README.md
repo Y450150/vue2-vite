@@ -8,7 +8,7 @@
 
   npm run dev 启动 webpack ssr
 
-  npm run dev:v 启动 vite csr  注：暂时没处理跨域问题
+  npm run dev:v 启动 vite csr
 
 # 生产环境
   目前 Production环境 仅支持webpack构建
