@@ -10,7 +10,7 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const resolve = file => path.resolve(__dirname, file)
 const server = express()
 
-
+ 
 
 
 const serve = (path) => express.static(resolve(path), {
