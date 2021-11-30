@@ -12,6 +12,7 @@ const server = express()
 
 
 
+
 const serve = (path) => express.static(resolve(path), {
     maxAge: 0
 })
@@ -29,9 +30,27 @@ readyPromise = devServer(server, (bundle, options) => {
 })
 
 function render(req, res) {
-    renderer.renderToString((err, html) => {
+
+    const handleError = err => {
+        if (err.url) {
+            res.redirect(err.url)
+        } else if (err.code === 404) {
+            res.status(404).send('404 | Page Not Found ---')
+        } else {
+            // Render Error Page or Redirect
+            res.status(500).send('500 | Internal Server Error')
+            console.error(`error during render : ${req.url}`)
+            console.error(err.stack)
+        }
+    }
+    const context = {
+        title: "yvywang",
+        url: req.url
+    }
+    renderer.renderToString(context, (err, html) => {
         if (err) {
-            return console.log(err)
+            handleError(err)
+            return console.log("renderString err", err)
         }
         res.send(html)
     })
@@ -39,8 +58,10 @@ function render(req, res) {
 
 server.use('/dist', serve('./dist')); // 部署dist目录
 server.use('/api', router) // 部署路由
-server.get('/', (req, res) => {
-    readyPromise.then(() => render(req, res))
+server.get('*', (req, res) => {
+    readyPromise.then(() => render(req, res)).catch(err => {
+        return console.log("renderPromise server get err", err)
+    })
 })
 
 server.listen(8080, () => {

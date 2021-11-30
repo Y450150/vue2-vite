@@ -1,6 +1,4 @@
 
-import svg from './svg.js'
-import chat from './chat.js'
 const RouterView = {
     name: "Router",
     render: h => h('router-view')
@@ -9,6 +7,12 @@ const RouterView = {
 export default [{
     path: '/page',
     component: RouterView,
-    children: [...svg, ...chat]
+    children: [{
+        path: '/page/svg',
+        component: () => import(/* webpackChunkName: "turn_code" */ "../views/turnCode/render.vue"),
+    }, {
+        path: '/page/chat',
+        component: () => import(/* webpackChunkName: "chat" */ "../views/chat/render.vue"),
+    }]
 }
 ]
