@@ -1,12 +1,13 @@
-const api = require('./api')
-const multer = require('multer');
-const router = require('express').Router()
+import api from './api'
+import multer from 'multer'
+import express from 'express'
+
+const router = express.Router()
 const upload = multer({ dest: "uploads/" }).single('file')
 api.filter(i => !i.fileUpload).forEach(({ method, path, controller }) => { router[method](path, controller) })
 api.filter(i => i.fileUpload).forEach(({ method, path, controller }) => { router[method](path, upload, controller) })
 
-
-module.exports = router
+export default router
 
 
 

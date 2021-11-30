@@ -10,7 +10,7 @@ module.exports = merge(base, {
     mode: isProd ? 'production' : 'development',
     devtool: '#source-map',
     entry: {
-        app: resolve(__dirname, '../src/entry-client.js')
+        app: resolve(__dirname, '../client/entry-client.js')
     },
     output: {
         filename: 'client-bundle.js'

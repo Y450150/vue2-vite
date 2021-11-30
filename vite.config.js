@@ -1,10 +1,12 @@
-import { defineConfig } from 'vite'
 import { createVuePlugin } from 'vite-plugin-vue2';
 
 const path = require('path')
 
-export default defineConfig(
+const config = (
     {
+        define: {
+            'process.env': process.env,
+        },
         plugins: [createVuePlugin()],
         resolve: {
             alias: [
@@ -12,3 +14,4 @@ export default defineConfig(
         },
     }
 )
+export default config

@@ -1,16 +1,16 @@
+import fs from 'fs'
+import path from 'path'
+import express from 'express'
+import router from './router'
+import cors from 'cors'
 
-
-const fs = require('fs')
-const path = require('path')
-const express = require('express')
-const router = require('./node/router')
-const devServer = require('./build/setup-dev-server')
+const devServer = require('../build/setup-dev-server')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const resolve = file => path.resolve(__dirname, file)
 const server = express()
 
- 
+
 
 
 const serve = (path) => express.static(resolve(path), {
@@ -24,7 +24,7 @@ const createRenderer = (bundle, options) => {
 }
 
 let renderer, readyPromise;
-const template = fs.readFileSync(resolve('./index.template.html'), 'utf-8')
+const template = fs.readFileSync(resolve('../index.template.html'), 'utf-8')
 readyPromise = devServer(server, (bundle, options) => {
     renderer = createRenderer(bundle, { template, ...options })
 })
@@ -56,6 +56,21 @@ function render(req, res) {
     })
 }
 
+
+
+const whiteList = ["http://127.0.0.1:3000"]
+
+const CORS_CHECK = (req, callback) => {
+    let corsOption;
+    if (whiteList.includes(req.header('Origin'))) {
+        corsOption = { origin: true }
+    } else {
+        corsOption = { origin: false }
+    }
+    callback(null, corsOption)
+}
+
+server.use(cors(CORS_CHECK))
 server.use('/dist', serve('./dist')); // 部署dist目录
 server.use('/api', router) // 部署路由
 server.get('*', (req, res) => {
@@ -69,7 +84,7 @@ server.listen(8080, () => {
 })
 
 var ws = require("nodejs-websocket")
-const mockPath = path.resolve(__dirname, './node/mock/chat.json')
+const mockPath = path.resolve(__dirname, './mock/chat.json')
 const clientList = []
 
 ws.createServer(function (conn) {
