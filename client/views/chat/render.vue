@@ -37,6 +37,7 @@ export default {
       type,
     };
   },
+  created() {},
   methods: {
     test() {
       const msg = this.$refs.edit.innerText;
@@ -45,15 +46,16 @@ export default {
       this.$refs.edit.innerText = "";
     },
     initWebSocket() {
+      const { $message } = this;
       const ws = new WebSocket("ws://localhost:8888");
       ws.onopen = function (e) {
-        console.log("连接服务器成功");
+        $message.success("连接服务器成功");
       };
       ws.onclose = function (e) {
-        console.log("服务器关闭");
+        $message.error("服务器关闭");
       };
       ws.onerror = function () {
-        console.log("连接出错");
+        $message.error("连接出错");
       };
       ws.onmessage = (e) => {
         console.log(e.data);

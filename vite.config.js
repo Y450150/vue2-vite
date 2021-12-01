@@ -7,9 +7,17 @@ const config = (
         define: {
             'process.env': process.env,
         },
+        css: {
+            preprocessorOptions: {
+                less: {
+                    javascriptEnabled: true,
+                },
+            },
+        },
         plugins: [createVuePlugin()],
         resolve: {
             alias: [
+                { find: /^~/, replacement: '' },
             ],
         },
     }

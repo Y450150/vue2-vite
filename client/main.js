@@ -4,6 +4,11 @@ import App from './App.vue'
 import axios from 'axios'
 import { createRouter } from './router.js'
 import './core/antd'
+// Vue.component('pro-layout', ProLayout)
+// Vue.component('page-container', PageHeaderWrapper)
+// Vue.component('page-header-wrapper', PageHeaderWrapper)
+
+
 Vue.prototype.$axios = axios
 export function createApp() {
   const router = createRouter()
@@ -11,6 +16,6 @@ export function createApp() {
     router,
     render: h => h(App)
   })
-  
+
   return { app, router }
 }

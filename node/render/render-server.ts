@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
 import express from "express";
-import router from "./router";
-import { MiddleWaresRouter } from "./router/page";
-import cors from "cors";
+
+const isProd = process.env.NODE_ENV === 'production'
 
 const devServer = require("../build/setup-dev-server");
 const { createBundleRenderer } = require("vue-server-renderer");
@@ -11,10 +10,6 @@ const { createBundleRenderer } = require("vue-server-renderer");
 const resolve = (file) => path.resolve(__dirname, file);
 const server = express();
 
-const serve = (path) =>
-  express.static(resolve(path), {
-    maxAge: 0,
-  });
 const createRenderer = (bundle, options) => {
   return createBundleRenderer(bundle, {
     basedir: resolve("./dist"),
@@ -28,7 +23,7 @@ readyPromise = devServer(server, (bundle, options) => {
   renderer = createRenderer(bundle, { template, ...options });
 });
 
-function render(req, res) {
+export function render(req, res) {
   const handleError = (err) => {
     if (err.url) {
       res.redirect(err.url);
@@ -54,26 +49,6 @@ function render(req, res) {
   });
 }
 
-const whiteList = [
-  "http://127.0.0.1:3000",
-  "http://localhost:3000",
-  "http://localhost:8080",
-  "http://127.0.0.1:8080",
-];
-
-const CORS_CHECK = (req, callback) => {
-  let corsOption;
-  if (whiteList.includes(req.header("Origin"))) {
-    corsOption = { origin: true };
-  } else {
-    corsOption = { origin: false };
-  }
-  callback(null, corsOption);
-};
-server.use('/', MiddleWaresRouter());
-server.use(cors(CORS_CHECK));
-server.use("/dist", serve("./dist")); // 部署dist目录
-server.use("/api", router); // 部署路由
 server.get("*", (req, res) => {
   readyPromise
     .then(() => render(req, res))
@@ -86,21 +61,10 @@ server.listen(8080, () => {
   console.log("server start");
 });
 
-var ws = require("nodejs-websocket");
-const mockPath = path.resolve(__dirname, "./mock/chat.json");
-const clientList = [];
 
-ws.createServer(function (conn) {
-  console.log("New connection");
-  clientList.push(conn);
-  conn.on("text", function (str) {
-    var data = JSON.parse(fs.readFileSync(mockPath, "utf-8"));
-    data.push(JSON.parse(str));
-    data = JSON.stringify(data);
-    fs.writeFileSync(mockPath, data);
-    clientList.forEach((conn) => conn.send(data));
-  });
-  conn.on("close", function (code, reason) {
-    console.log("Connection closed");
-  });
-}).listen(8888);
+export function initServerRender(){
+    
+}
+export function serverRender(){
+
+}
