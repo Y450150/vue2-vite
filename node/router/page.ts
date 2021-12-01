@@ -1,19 +1,19 @@
 import express from "express";
+import cors from "cors";
+import * as config from "../config";
+
+const CORS_CHECK = (req, callback) => {
+  let corsOption;
+  if (config.whiteList.includes(req.header("Origin"))) {
+    corsOption = { origin: true };
+  } else {
+    corsOption = { origin: false };
+  }
+  callback(null, corsOption);
+};
 
 const rules = [{ path: "*", method: "get" }];
-const mds = [];
-mds.push(async (req, res, next) => {
-  console.log("中1");
-  await next();
-});
-mds.push(async (req, res, next) => {
-  console.log("中2");
-  await next();
-});
-mds.push(async (req, res, next) => {
-  console.log("中3");
-  await next();
-});
+const mds = [cors(CORS_CHECK)];
 
 export const MiddleWaresRouter = () => {
   const Router = express.Router();
