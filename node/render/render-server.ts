@@ -2,28 +2,16 @@ import fs from "fs";
 import path from "path";
 import express from "express";
 
-const isProd = process.env.NODE_ENV === 'production'
-
-const devServer = require("../build/setup-dev-server");
 const { createBundleRenderer } = require("vue-server-renderer");
-
-const resolve = (file) => path.resolve(__dirname, file);
+const devServer = require("../../build/setup-dev-server");
+const isProd = process.env.NODE_ENV === "production";
 const server = express();
-
-const createRenderer = (bundle, options) => {
-  return createBundleRenderer(bundle, {
-    basedir: resolve("./dist"),
-    ...options,
-  });
-};
+const resolve = (file) => path.resolve(__dirname, file);
 
 let renderer, readyPromise;
-const template = fs.readFileSync(resolve("../index.template.html"), "utf-8");
-readyPromise = devServer(server, (bundle, options) => {
-  renderer = createRenderer(bundle, { template, ...options });
-});
 
-export function render(req, res) {
+export function render(ctx) {
+  const { req, res } = ctx;
   const handleError = (err) => {
     if (err.url) {
       res.redirect(err.url);
@@ -49,22 +37,22 @@ export function render(req, res) {
   });
 }
 
-server.get("*", (req, res) => {
+export function initServerRender() {
+  const createRenderer = (bundle, options) => {
+    return createBundleRenderer(bundle, {
+      basedir: resolve("./dist"),
+      ...options,
+    });
+  };
+  const template = fs.readFileSync(resolve("../../index.template.html"), "utf-8");
+  readyPromise = devServer(server, (bundle, options) => {
+    renderer = createRenderer(bundle, { template, ...options });
+  });
+}
+export function serverRender(ctx) {
   readyPromise
-    .then(() => render(req, res))
+    .then(() => render(ctx))
     .catch((err) => {
       return console.log("renderPromise server get err", err);
     });
-});
-
-server.listen(8080, () => {
-  console.log("server start");
-});
-
-
-export function initServerRender(){
-    
-}
-export function serverRender(){
-
 }
