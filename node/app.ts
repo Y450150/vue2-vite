@@ -8,20 +8,24 @@ import { initServerRender } from "./render/render-server";
 const server = express();
 
 initServerRender();
-MiddleWaresRouter(server);
 
 const resolve = (file) => path.resolve(process.cwd(), file);
-const serve = (path, cache) =>
-  express.static(resolve(path), {
+const serve = (path, cache) => {
+  return express.static(resolve(path), {
     // maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
     maxAge: 0,
   });
-
+};
+const test = serve("./dist", true)
 server.use(CORS);
 server.use("/dist", serve("./dist", true)); // 部署dist目录
+// server.use("/dist", (req, res) => {
+//   console.log(req.url)
+//   res.send("test")
+// }); // 部署dist目录
 server.use("/api", router); // 部署路由
 
-
+MiddleWaresRouter(server); // 放在这里，让前面的先命中
 export { server };
 // var ws = require("nodejs-websocket");
 // const mockPath = path.resolve(__dirname, "./mock/chat.json");
