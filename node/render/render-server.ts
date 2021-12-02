@@ -6,12 +6,11 @@ const { createBundleRenderer } = require("vue-server-renderer");
 const devServer = require("../../build/setup-dev-server");
 const isProd = process.env.NODE_ENV === "production";
 const server = express();
-const resolve = (file) => path.resolve(__dirname, file);
+const resolve = (file) => path.resolve(process.cwd(), file);
 
 let renderer, readyPromise;
 
-export function render(ctx) {
-  const { req, res } = ctx;
+export async function render(req, res) {
   const handleError = (err) => {
     if (err.url) {
       res.redirect(err.url);
@@ -37,22 +36,30 @@ export function render(ctx) {
   });
 }
 
-export function initServerRender() {
+export async function initServerRender() {
   const createRenderer = (bundle, options) => {
     return createBundleRenderer(bundle, {
+      // this is only needed when vue-server-renderer is npm-linked
       basedir: resolve("./dist"),
+      // recommended for performance
+      runInNewContext: false,
       ...options,
     });
   };
-  const template = fs.readFileSync(resolve("../../index.template.html"), "utf-8");
+  const template = fs.readFileSync(resolve("./index.template.html"), "utf-8");
   readyPromise = devServer(server, (bundle, options) => {
     renderer = createRenderer(bundle, { template, ...options });
   });
 }
-export function serverRender(ctx) {
-  readyPromise
-    .then(() => render(ctx))
-    .catch((err) => {
-      return console.log("renderPromise server get err", err);
-    });
+export async function serverRender(req, res) {
+  //   console.log("-----------------------------------");
+  //   console.log(req);
+  //   console.log("-----------------------------------");
+  try {
+    console.log(req.url, "serverRender-------");
+    await readyPromise;
+    await render(req, res);
+  } catch (error) {
+    console.log("renderPromise server get err", error);
+  }
 }

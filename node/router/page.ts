@@ -1,25 +1,10 @@
-import express from "express";
-import cors from "cors";
-import * as config from "../config";
-
-const CORS_CHECK = (req, callback) => {
-  let corsOption;
-  if (config.whiteList.includes(req.header("Origin"))) {
-    corsOption = { origin: true };
-  } else {
-    corsOption = { origin: false };
-  }
-  callback(null, corsOption);
-};
-
+import { serverRender } from "../render/render-server";
 const rules = [{ path: "*", method: "get" }];
-const mds = [cors(CORS_CHECK)];
+const mds = [serverRender];
 
-export const MiddleWaresRouter = () => {
-  const Router = express.Router();
+export const MiddleWaresRouter = (app) => {
   rules.forEach((item) => {
     const { method = "get", path } = item;
-    Router[method](path, ...mds);
+    app[method](path, ...mds);
   });
-  return Router;
 };

@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsnd --transpile-only node/app.ts",
+    "dev": "tsnd --transpile-only script/start_node.ts",
     "dev:v": "vite",
     "build:client": "cross-env NODE_ENV=dev webpack --config build/webpack.client.config.js",
     "build:server": "cross-env NODE_ENV=dev webpack --config build/webpack.server.config.js",
