@@ -1,14 +1,12 @@
 import fs from "fs";
 import path from "path";
-import express from "express";
-
-const { createBundleRenderer } = require("vue-server-renderer");
+import { BundleRenderer, createBundleRenderer } from "vue-server-renderer";
 const devServer = require("../../build/setup-dev-server");
 const isProd = process.env.NODE_ENV === "production";
-const server = express();
 const resolve = (file) => path.resolve(process.cwd(), file);
 
-let renderer, readyPromise;
+let renderer: BundleRenderer;
+let readyPromise: Promise<any>;
 
 export async function render(req, res) {
   const handleError = (err) => {
@@ -36,7 +34,7 @@ export async function render(req, res) {
   });
 }
 
-export async function initServerRender() {
+export async function initServerRender(server) {
   const createRenderer = (bundle, options) => {
     return createBundleRenderer(bundle, {
       // this is only needed when vue-server-renderer is npm-linked
@@ -51,10 +49,8 @@ export async function initServerRender() {
     renderer = createRenderer(bundle, { template, ...options });
   });
 }
+
 export async function serverRender(req, res) {
-  //   console.log("-----------------------------------");
-  //   console.log(req);
-  //   console.log("-----------------------------------");
   try {
     console.log(req.url, "serverRender-------");
     await readyPromise;
