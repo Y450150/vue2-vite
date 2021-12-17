@@ -1,4 +1,5 @@
 export function testApi(req, res) {
-  const { name, age } = req.body;
-  res.send({ description: `super hero ${name}, now age years old` });
+  const test = req.body;
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.send({ data: req.data });
 }

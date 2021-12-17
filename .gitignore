@@ -9,3 +9,4 @@ node_modules/
 .eslintcache
 .env
 uploads/
+clarity-js/node_modules

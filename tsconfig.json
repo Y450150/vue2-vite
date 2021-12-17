@@ -19,7 +19,8 @@
     }
   },
   "include": [
-    "node/**/*"
+    "node/**/*",
+    "clarity-js/**/*"
   ],
   "exclude": [
     "./node_modules/*",
