@@ -51,7 +51,6 @@
     "body-parser": "^1.19.0",
     "clarity-js": "^0.6.30",
     "clipboard": "^2.0.8",
-    "component-classes": "^1.2.6",
     "cors": "^2.8.5",
     "multer": "^1.4.2",
     "nodejs-websocket": "^1.7.2",
